@@ -1,0 +1,101 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "feedback-dashboard",
+	"main": "src/index.ts",
+	"compatibility_date": "2024-06-19",
+	"observability": {
+		"enabled": true
+	},
+	"triggers": {
+		"crons": [
+			"0 9 * * *"
+		]
+	},
+	"d1_databases": [
+		{
+			"binding": "feedback_db",
+			"database_name": "feedback_db",
+			"database_id": "e47979e7-3fe4-4c4d-918e-e29b229990ee",
+			"migrations_dir": "migrations"
+		}
+	],
+	"ai": {
+		"binding": "AI"
+	},
+	"workflows": [
+		{
+			"name": "daily-analysis",
+			"binding": "DAILY_ANALYSIS_WORKFLOW",
+			"class_name": "DailyAnalysisWorkflow"
+		}
+	],
+	"vars": {
+		"SLACK_WEBHOOK_URL": "",
+		"INGEST_TOKEN": "test-token-dev",
+		"USE_MOCK_AI": "true"
+	},
+	"env": {
+		"production": {
+			"triggers": {
+				"crons": [
+					"0 9 * * *"
+				]
+			},
+			"vars": {
+				"SLACK_WEBHOOK_URL": "",
+				"INGEST_TOKEN": "test-token-dev",
+				"USE_MOCK_AI": "false"
+			},
+			"workflows": [
+				{
+					"name": "daily-analysis",
+					"binding": "DAILY_ANALYSIS_WORKFLOW",
+					"class_name": "DailyAnalysisWorkflow"
+				}
+			],
+			"d1_databases": [
+				{
+					"binding": "feedback_db",
+					"database_name": "feedback_db",
+					"database_id": "e47979e7-3fe4-4c4d-918e-e29b229990ee",
+					"migrations_dir": "migrations"
+				}
+			],
+			"ai": {
+				"binding": "AI"
+			}
+		}
+	}
+	/**
+	 * Smart Placement
+	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+	 */
+	// "placement": {  "mode": "smart" }
+	/**
+	 * Bindings
+	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
+	 * databases, object storage, AI inference, real-time communication and more.
+	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
+	 */
+	/**
+	 * Environment Variables
+	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+	 * Note: Use secrets to store sensitive data.
+	 * https://developers.cloudflare.com/workers/configuration/secrets/
+	 */
+	// "vars": {  "MY_VARIABLE": "production_value" }
+	/**
+	 * Static Assets
+	 * https://developers.cloudflare.com/workers/static-assets/binding/
+	 */
+	// "assets": {  "directory": "./public/",  "binding": "ASSETS" }
+	/**
+	 * Service Bindings (communicate between multiple Workers)
+	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
+	 */
+	// "services": [  {   "binding": "MY_SERVICE",   "service": "my-service"  } ]
+}

@@ -1,0 +1,20 @@
+{
+	"name": "feedback-dashboard",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev --local",
+		"start": "wrangler dev --local --test-scheduled",
+		"cf-typegen": "wrangler types"
+	},
+	"devDependencies": {
+		"typescript": "^5.5.2",
+		"wrangler": "^4.59.2"
+	},
+	"dependencies": {
+		"@cloudflare/ai": "^1.2.2",
+		"base64-js": "^1.5.1",
+		"mustache": "^4.2.0"
+	}
+}
